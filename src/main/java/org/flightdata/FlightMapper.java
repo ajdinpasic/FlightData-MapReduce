@@ -1,18 +1,17 @@
 package org.flightdata;
-import org.apache.hadoop.io.DoubleWritable;
+
+import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import java.io.IOException;
-public class FlightMapper extends Mapper<LongWritable, Text, Text, DoubleWritable> {
-    private Text startingAiportName = new Text();
-    private DoubleWritable basePayForAirport = new DoubleWritable();
+public class FlightMapper extends Mapper<LongWritable, Text, Text, FloatWritable> {
 
-    @Override
-    protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-        String splitRecords[] = value.toString().split(",");
-        startingAiportName.set(splitRecords[3]);
-        basePayForAirport.set(Double.parseDouble(splitRecords[12]));
-        context.write(startingAiportName, basePayForAirport); // <key-value> : <airportName-basePayForThatAiport>
+    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        String line = value.toString();
+        String[] words = line.split(",");
+        Text outputKey = new Text(words[3].toUpperCase().trim());
+        FloatWritable outputValue = new FloatWritable(Float.parseFloat(words[12]));
+        context.write(outputKey, outputValue);
     }
 }
