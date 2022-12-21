@@ -1,37 +1,36 @@
 package org.flightdata;
 
-
-import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
-import org.w3c.dom.Text;
+import org.apache.hadoop.util.GenericOptionsParser;
 
 
-public class FlightRunner extends Configured implements Tool {
+public class FlightRunner {
     public static void main(String[] args) throws Exception {
-        int rc = ToolRunner.run(new FlightRunner(), args);
-        System.exit(rc);
-    }
+        //set up configurations
+        Configuration c = new Configuration();
+        String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
+        Path input = new Path(files[0]);
+        Path output = new Path(files[1]);
+        Job j = new Job(c, "Total base pay");
+        j.setJarByClass(FlightRunner.class);
+        j.setMapperClass(FlightMapper.class);
+        j.setReducerClass(FlightReducer.class);
+        j.setOutputKeyClass(Text.class);
+        j.setOutputValueClass(FloatWritable.class);
 
-    @Override
-    public int run(String[] args) throws Exception {
-        Job job = new Job(getConf());
-        job.setJarByClass(getClass());
-        job.setJobName(getClass().getSimpleName());
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
-        job.setMapperClass(FlightMapper.class);
-        job.setCombinerClass(FlightReducer.class);
-        job.setReducerClass(FlightReducer.class);
+        FileInputFormat.addInputPath(j, input);
+        FileOutputFormat.setOutputPath(j, output);
 
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(DoubleWritable.class);
-
-        return job.waitForCompletion(true) ? 0 : 1;
+        long startTime = System.currentTimeMillis();
+        j.waitForCompletion(true);
+        long estimatedTime = System.currentTimeMillis() - startTime;
+        System.out.println("Time Elapsed : " + estimatedTime);
+        System.exit(0);
     }
 }
