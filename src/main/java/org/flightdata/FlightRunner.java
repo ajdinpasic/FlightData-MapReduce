@@ -17,10 +17,15 @@ public class FlightRunner {
         String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
         Path input = new Path(files[0]);
         Path output = new Path(files[1]);
-        Job j = new Job(c, "Total base pay");
+        //Comment or comment based on the task you wish to perform
+        /*Job j = new Job(c, "Total base pay");
         j.setJarByClass(FlightRunner.class);
         j.setMapperClass(FlightMapper.class);
-        j.setReducerClass(FlightReducer.class);
+        j.setReducerClass(FlightReducer.class);*/
+        Job j = new Job(c, "Average pay");
+        j.setJarByClass(FlightRunner.class);
+        j.setMapperClass(FlightMapperAverage.class);
+        j.setReducerClass(FlightReducerAverage.class);
         j.setOutputKeyClass(Text.class);
         j.setOutputValueClass(FloatWritable.class);
 
