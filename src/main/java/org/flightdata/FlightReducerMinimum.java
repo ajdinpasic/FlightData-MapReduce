@@ -9,7 +9,7 @@ public  class FlightReducerMinimum extends Reducer<Text, FloatWritable, Text, Fl
 
     public void reduce(Text word, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException {
         float min = 0;
-        int count = 0;
+        float count = 0;
         for (FloatWritable value : values) {
             if(count == 0) {
                 min = value.get();
