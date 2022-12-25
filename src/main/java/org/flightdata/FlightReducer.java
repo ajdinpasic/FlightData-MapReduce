@@ -9,10 +9,8 @@ public  class FlightReducer extends Reducer<Text, FloatWritable, Text, FloatWrit
 
     public void reduce(Text word, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException {
         float sum = 0;
-        float count = 0;
         for (FloatWritable value : values) {
             sum += value.get();
-            count = count + 1;
         }
         context.write(word, new FloatWritable(sum));
     }
