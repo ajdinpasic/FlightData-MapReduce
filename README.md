@@ -10,12 +10,12 @@ Hadoop
 
 ## Installation 🏧
 Prerequisites: Java JDK and Hadoop downloaded and set up
-1. Git clone <project>
+1. Git clone <project-path>
 2. Navigate to .../hadoop.3.0/sbin
 3. start-all.cmd
 4. Navigate to .../FlightData-MapReduce
 5. mvn clean > mvn install
-6. hadoop jar target/<jar> org.flightdata/FlightRunner <input-path> <output-file>
+6. hadoop jar target/<jar-snapshot> org.flightdata/FlightRunner <input-path> <output-file>
 
 ## Features 🎫
 
