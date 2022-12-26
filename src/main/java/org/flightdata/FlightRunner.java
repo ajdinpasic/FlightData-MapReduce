@@ -17,15 +17,11 @@ public class FlightRunner {
         String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
         Path input = new Path(files[0]);
         Path output = new Path(files[1]);
-        //Comment or comment based on the task you wish to perform
-        /*Job j = new Job(c, "Total base pay");
+        //Comment or uncomment based on the task you wish to perform
+        Job j = new Job(c, "Total base pay");
         j.setJarByClass(FlightRunner.class);
         j.setMapperClass(FlightMapper.class);
-        j.setReducerClass(FlightReducer.class);*/
-        Job j = new Job(c, "Average pay");
-        j.setJarByClass(FlightRunner.class);
-        j.setMapperClass(FlightMapperAverage.class);
-        j.setReducerClass(FlightReducerAverage.class);
+        j.setReducerClass(FlightReducer.class);
         j.setOutputKeyClass(Text.class);
         j.setOutputValueClass(FloatWritable.class);
 
@@ -35,7 +31,23 @@ public class FlightRunner {
         long startTime = System.currentTimeMillis();
         j.waitForCompletion(true);
         long estimatedTime = System.currentTimeMillis() - startTime;
-        System.out.println("Time Elapsed : " + estimatedTime);
+        System.out.println("Time Elapsed for first job : " + estimatedTime);
+/*
+        Job j2 = new Job(c,"Count satisfied records");
+        j2.setJarByClass(FlightRunner.class);
+        j2.setMapperClass(FlightMapperCount.class);
+        j2.setReducerClass(FlightReducerCount.class);
+        j2.setOutputKeyClass(Text.class);
+        j2.setOutputValueClass(FloatWritable.class);
+
+        FileInputFormat.addInputPath(j2, new Path("/ticket-prices"));
+        FileOutputFormat.setOutputPath(j2, new Path("/ticket-report"));
+
+        long startTimeJob2 = System.currentTimeMillis();
+        j2.waitForCompletion(true);
+        long estimatedTimeJob2 = System.currentTimeMillis() - startTimeJob2;
+        System.out.println("Time Elapsed for second job : " + estimatedTimeJob2); */
+
         System.exit(0);
     }
 }
